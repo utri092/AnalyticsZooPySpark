@@ -13,7 +13,8 @@ conf = create_spark_conf() \
     .setMaster("local[4]") \
     .set("spark.sql.warehouse.dir", "file:///C:/Spark/temp") \
     .set("spark.sql.streaming.checkpointLocation", "file:///C:/Spark/checkpoint") \
-    .set("spark.sql.execution.arrow.enabled", "true")
+    .set("spark.sql.execution.arrow.enabled", "true")\
+    # .set('spark.sql.execution.arrow.fallback.enabled', 'true')
     #.set("spark.sql.execution.arrow.maxRecordsPerBatch", "") # Utsav: Tweak only if memory limits are known. Default = 10,000
 
 spark = SparkSession.builder \
@@ -29,42 +30,28 @@ df = spark.read.format("csv") \
     .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZZ") \
     .load("../resources/datasets/dataset-1-converted.csv")
 
+trainDf = spark.read.format("csv") \
+    .option("inferSchema", "true") \
+    .option("header", "true") \
+    .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZZ") \
+    .load("../resources/datasets/training-dataset1.csv")
 
+testDf = spark.read.format("csv") \
+    .option("inferSchema", "true") \
+    .option("header", "true") \
+    .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZZ") \
+    .load("../resources/datasets/test-dataset1.csv")
 
-assembler = VectorAssembler(
-    inputCols=["processing-time", "carparkID"],
-    outputCol="features")
+trainedNN = Model.loadModel(modelPath="../resources/savedModel/bigdl/trainedNN.bigdl", weightPath="../resources/savedModel/bigdl/trainedNN.bin")
+print("Loaded Trained NN!\n", trainedNN)
 
+testDf = testDf.select('processing-time', 'carparkID')
 
-df = assembler.transform(df)
-
-
-df = df.withColumnRenamed('slotOccupancy','label')
-
-df = df.select('features','label')
-
-try:
-    bigdl_model = Model.load_keras(json_path="../resources/savedModels/keras_1.2.2/model.json", hdf5_path="../resources/savedModels/keras_1.2.2/weights.h5")
-    print("Big Dl Model Created from keras .json and weights .h5 (pre-trained model ) ", bigdl_model)
-except Exception as e:
-    print(e)
-
-
-criterion = MSECriterion()
-estimator = NNEstimator(bigdl_model, criterion)
-
-estimator.setMaxEpoch(5)\
-         .setOptimMethod(Adam())\
-         .setBatchSize(20)
-
-print("Before Training")
-trainedNN = estimator.fit(df)
-
-print("Trained")
-
-trainedNN.model.saveModel(modelPath="../resources/savedModel/bigdl/trainedNN.bigdl", weightPath="../resources/savedModel/bigdl/trainedNN.bin", over_write=True)
-
-print("Saved!")
-
-
-
+testDf.show(n=20)
+print("Test DF!\n")
+pdTestNumpy = testDf.toPandas().to_numpy()
+print(pdTestNumpy.shape)
+# FIXME: Bad Predictions
+predictions =  trainedNN.predict(pdTestNumpy)
+print(predictions)
+print("Predictions!\n")

@@ -2,8 +2,7 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from zoo.pipeline.nnframes import NNModel
-from zoo.tfpark.model import KerasModel
+
 
 df = pd.read_csv("../resources/datasets/dataset_1_converted.csv")
 

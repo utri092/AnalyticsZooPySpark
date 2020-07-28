@@ -125,7 +125,6 @@ for i, layer in enumerate(layers):
 
 print("done")
 
-
 model.set_weights(layersList)
 
 model.save_weights(filepath="../resources/savedModels/lol.h5")

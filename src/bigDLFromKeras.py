@@ -1,6 +1,8 @@
-
+from bigdl.nn.criterion import MSECriterion
 from bigdl.util.common import init_engine, create_spark_conf
 from bigdl.nn.layer import *
+from zoo.pipeline.nnframes import NNEstimator
+
 from pyspark.sql import SparkSession
 
 conf = create_spark_conf() \
@@ -17,7 +19,6 @@ spark = SparkSession.builder \
 
 # Init Big DL Engine
 init_engine()
-
 
 """
 OPTION 1: Use a .json file

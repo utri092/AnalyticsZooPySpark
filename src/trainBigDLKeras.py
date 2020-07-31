@@ -8,6 +8,9 @@ from zoo.pipeline.nnframes import NNModel
 from pyspark.ml.feature import VectorAssembler
 from pyspark.sql import SparkSession
 
+cores = [1, 2, 3, 4]
+
+
 conf = create_spark_conf() \
     .setAppName("Spark_Basic_Learning") \
     .setMaster("local[4]") \
@@ -45,26 +48,40 @@ df = df.select('features','label')
 
 try:
     bigdl_model = Model.load_keras(json_path="../resources/savedModels/keras_1.2.2/model.json", hdf5_path="../resources/savedModels/keras_1.2.2/weights.h5")
+
     print("Big Dl Model Created from keras .json and weights .h5 (pre-trained model ) ", bigdl_model)
 except Exception as e:
     print(e)
 
-
 criterion = MSECriterion()
 estimator = NNEstimator(bigdl_model, criterion)
 
-estimator.setMaxEpoch(5)\
+estimator.setMaxEpoch(50)\
          .setOptimMethod(Adam())\
-         .setBatchSize(20)
+         .setBatchSize(2048)
 
 print("Before Training")
-trainedNN = estimator.fit(df)
 
+from datetime import datetime
+
+
+print("4 Core")
+print("Batches", 2048)
+
+startTime = datetime.now()
+# print("StartTime!\n", startTime)
+for i in range(1000):
+    trainedNN = estimator.fit(df)
+
+endTime = datetime.now()
+print("EndTime!\n", endTime)
 print("Trained")
 
 trainedNN.model.saveModel(modelPath="../resources/savedModel/bigdl/trainedNN.bigdl", weightPath="../resources/savedModel/bigdl/trainedNN.bin", over_write=True)
 
 print("Saved!")
+
+
 
 
 

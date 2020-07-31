@@ -42,6 +42,8 @@ testDf = spark.read.format("csv") \
     .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZZ") \
     .load("../resources/datasets/test-dataset1.csv")
 
+
+
 trainedNN = Model.loadModel(modelPath="../resources/savedModel/bigdl/trainedNN.bigdl", weightPath="../resources/savedModel/bigdl/trainedNN.bin")
 print("Loaded Trained NN!\n", trainedNN)
 

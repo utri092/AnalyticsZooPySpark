@@ -28,7 +28,7 @@ df = spark.read.format("csv") \
     .option("inferSchema", "true") \
     .option("header", "true") \
     .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZZ") \
-    .load("../resources/datasets/dataset-1-converted.csv")
+    .load("../resources/datasets/dataset-1_converted.csv")
 
 trainDf = spark.read.format("csv") \
     .option("inferSchema", "true") \

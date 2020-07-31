@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from zoo.pipeline.nnframes import NNModel
 
-df = pd.read_csv("../resources/datasets/dataset-1-converted.csv")
+df = pd.read_csv("../resources/datasets/dataset-1_converted.csv")
 
 trainDf, testDf = train_test_split(df, test_size=0.2)
 print("Created Train and Test Df\n")

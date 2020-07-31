@@ -30,17 +30,13 @@ df = spark.read.format("csv") \
     .option("inferSchema", "true") \
     .option("header", "true") \
     .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZZ") \
-    .load("../resources/datasets/dataset-1-converted.csv")
-
-
+    .load("../resources/datasets/dataset-1_converted.csv")
 
 assembler = VectorAssembler(
     inputCols=["processing-time", "carparkID"],
     outputCol="features")
 
-
 df = assembler.transform(df)
-
 
 df = df.withColumnRenamed('slotOccupancy','label')
 
@@ -63,7 +59,6 @@ estimator.setMaxEpoch(50)\
 print("Before Training")
 
 from datetime import datetime
-
 
 print("4 Core")
 print("Batches", 2048)

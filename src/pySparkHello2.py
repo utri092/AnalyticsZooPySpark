@@ -47,7 +47,7 @@ print("SparkSession start with BigDL!\n")
 
 # TODO: Replicate in Spark and convert to Pd or ndArray using Arrow
 
-df = pd.read_csv("../resources/datasets/dataset_1_converted.csv")
+df = pd.read_csv("../resources/datasets/dataset-1_converted.csv")
 
 trainDf, testDf = train_test_split(df, test_size=0.2)
 print("Created Train and Test Df\n")

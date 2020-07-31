@@ -41,7 +41,7 @@ print("SparkSession start with BigDL!\n")
 
 # df.show()
 
-df = pd.read_csv("../resources/datasets/dataset_1_converted.csv")
+df = pd.read_csv("../resources/datasets/dataset-1_converted.csv")
 
 # trainDf, testDf = df.randomSplit([0.8, 0.2])
 

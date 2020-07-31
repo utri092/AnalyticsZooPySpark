@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 
-df = pd.read_csv("../resources/datasets/dataset_1_converted.csv")
+df = pd.read_csv("../resources/datasets/dataset-1_converted.csv")
 
 trainDf, testDf = train_test_split(df, test_size=0.2)
 print("Created Train and Test Df\n")

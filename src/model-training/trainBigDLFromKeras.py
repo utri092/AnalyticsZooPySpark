@@ -42,10 +42,24 @@ df = df.withColumnRenamed('slotOccupancy','label')
 
 df = df.select('features','label')
 
-try:
-    bigdl_model = Model.load_keras(json_path="../../resources/newModels/Keras_1.2.2/model.json", hdf5_path="../../resources/newModels/Keras_1.2.2/weights.h5")
+"""
+   Option 1 : Load architecture using model.json and weights from weights.h5
+"""
 
-    print("Big Dl Model Created from keras .json and weights .h5 (pre-trained model ) ", bigdl_model)
+# try:
+#     bigdl_model = Model.load_keras(json_path="../../resources/newModels/Keras_1.2.2/model.json", hdf5_path="../../resources/newModels/Keras_1.2.2/weights.h5")
+#
+#     print("Big Dl Model Created from keras .json and weights .h5 (pre-trained model ) ", bigdl_model)
+# except Exception as e:
+#     print(e)
+
+"""
+   Option 2 : Load both architecture and weights from  model.h5
+"""
+try:
+    bigdl_model = Model.load_keras(hdf5_path="../../resources/newModels/Keras_1.2.2/model.h5")
+
+    print("Big Dl Model Created from keras .h5 ", bigdl_model)
 except Exception as e:
     print(e)
 
@@ -71,7 +85,10 @@ endTime = datetime.now()
 print("EndTime!\n", endTime)
 print("Trained")
 
-trainedNN.model.saveModel(modelPath="../../resources/newModels/BigDL/trainedNN.bigdl", weightPath="../../resources/newModels/Keras_1.2.2/trainedNN.bin", over_write=True)
+''' Option 1'''
+# trainedNN.model.saveModel(modelPath="../../resources/newModels/BigDL/trainedNN.bigdl", weightPath="../../resources/newModels/BigDL/trainedNN.bin", over_write=True)
+''' Option 2'''
+trainedNN.model.saveModel(modelPath="../../resources/newModels/BigDL/trainedNN.bigdl", over_write=True)
 
 print("Saved!")
 

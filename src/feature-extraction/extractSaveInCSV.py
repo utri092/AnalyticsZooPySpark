@@ -4,6 +4,7 @@ from bigdl.util.common import init_engine, create_spark_conf
 from pyspark.ml.feature import VectorAssembler
 from pyspark.sql import SparkSession
 
+
 cores = [1, 2, 3, 4]
 
 
@@ -28,21 +29,35 @@ df = spark.read.format("csv") \
     .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZZ") \
     .load("../../resources/datasets/dataset-1_converted.csv")
 
-
-df.show()
-
 df.printSchema()
-
-
 from pyspark.sql.functions import  to_timestamp,date_format
+from pyspark.sql.functions import year,month,dayofmonth, dayofweek, hour, minute, second
 
 # Convert processing time from int to timestamp
 df = df.withColumn("processing-time",to_timestamp(col="processing-time"))
 
+# Add columns for extracted features
+
+print("After Conversion \n")
+df.printSchema()
 
 # Extract Day of Week and Week of Month using the feature extraction
-# FIXME: This has been hardcoded to be put into carparkID & slotOccupancy cols need to create new cols instead
 
-df = df.withColumn("carparkID",date_format(date ="processing-time",format= "EEEE"))
+df = df.withColumn("dayOfWeek",dayofweek(col="processing-time"))\
+    .withColumn("dayOfMonth",dayofmonth(col="processing-time"))\
+    .withColumn("weekOfMonth",date_format(date ="processing-time",format= "W"))\
+    .withColumn("year",year(col="processing-time"))\
+    .withColumn("month",month(col="processing-time"))\
+    .withColumn("hour",hour(col="processing-time"))\
+    .withColumn("minute",minute(col="processing-time"))\
+    .withColumn("second",second(col="processing-time"))\
+    .drop("processing-time")
 
-df.withColumn("slotOccupancy",date_format(date ="processing-time",format= "W")).show()
+
+
+df.show()
+
+df.toPandas().to_csv(path_or_buf="../../resources/newDatasets/dataset-1.csv")
+
+
+

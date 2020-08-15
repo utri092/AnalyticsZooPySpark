@@ -1,7 +1,7 @@
 
 from bigdl.util.common import init_engine, create_spark_conf
 
-from pyspark.ml.feature import VectorAssembler
+
 from pyspark.sql import SparkSession
 
 

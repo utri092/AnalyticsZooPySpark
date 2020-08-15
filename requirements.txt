@@ -1,0 +1,10 @@
+tensorflow~=1.15.0
+
+BigDL~=0.10.0
+numpy~=1.19.1
+h5py~=2.10.0
+Keras~=1.2.2
+py4j~=0.10.7
+scipy~=1.5.2
+pypandoc~=1.5
+setuptools~=49.6.0

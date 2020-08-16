@@ -66,9 +66,14 @@ except Exception as e:
 criterion = MSECriterion()
 estimator = NNEstimator(bigdl_model, criterion)
 
+print(estimator.explainParams())
+
 estimator.setMaxEpoch(50)\
          .setOptimMethod(Adam())\
          .setBatchSize(2048)
+
+
+
 
 print("Before Training")
 
@@ -91,8 +96,3 @@ print("Trained")
 trainedNN.model.saveModel(modelPath="../../resources/newModels/BigDL/trainedNN.bigdl", over_write=True)
 
 print("Saved!")
-
-
-
-
-

@@ -1,11 +1,7 @@
-from bigdl.nn.criterion import MSECriterion
-from zoo.pipeline.nnframes import *
-from bigdl.util.common import init_engine, create_spark_conf
+
 from bigdl.nn.layer import *
 from bigdl.optim.optimizer import *
-from zoo.pipeline.nnframes import NNModel
 
-from pyspark.ml.feature import VectorAssembler
 from pyspark.sql import SparkSession
 
 conf = create_spark_conf() \
@@ -44,6 +40,16 @@ print("Test DF!\n")
 pdTestNumpy = testDf.toPandas().to_numpy()
 print(pdTestNumpy.shape)
 # FIXME: Bad Predictions
-predictions =  trainedNN.predict(pdTestNumpy)
-print(predictions)
+
+from datetime import datetime
+
+print("StartTime!\n")
+startTime = datetime.now()
+
+for i in range(1000):
+    predictions = trainedNN.predict(pdTestNumpy)
+
+endTime = datetime.now()
+
+print(endTime - startTime)
 print("Predictions!\n")

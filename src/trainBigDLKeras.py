@@ -70,6 +70,7 @@ for i in range(1000):
 
 endTime = datetime.now()
 print("EndTime!\n", endTime)
+print("Time Taken: ", endTime - startTime)
 print("Trained")
 
 trainedNN.model.saveModel(modelPath="../resources/savedModel/bigdl/trainedNN.bigdl", weightPath="../resources/savedModel/bigdl/trainedNN.bin", over_write=True)

@@ -73,8 +73,6 @@ estimator.setMaxEpoch(50)\
          .setBatchSize(2048)
 
 
-
-
 print("Before Training")
 
 from datetime import datetime

@@ -1,3 +1,4 @@
+import time
 
 from bigdl.util.common import init_engine, create_spark_conf
 
@@ -13,7 +14,8 @@ conf = create_spark_conf() \
     .setMaster("local[4]") \
     .set("spark.sql.warehouse.dir", "file:///C:/Spark/temp") \
     .set("spark.sql.streaming.checkpointLocation", "file:///C:/Spark/checkpoint") \
-    .set("spark.sql.execution.arrow.enabled", "true")
+    .set("spark.sql.execution.arrow.enabled", "true")\
+    .set("spark.sql.execution.arrow.fallback.enabled", "true")
     #.set("spark.sql.execution.arrow.maxRecordsPerBatch", "") # Utsav: Tweak only if memory limits are known. Default = 10,000
 
 spark = SparkSession.builder \
@@ -57,7 +59,9 @@ df = df.withColumn("dayOfWeek",dayofweek(col="processing-time"))\
 
 df.show()
 
+startTime = time.time()
 df.toPandas().to_csv(path_or_buf="../../resources/newDatasets/dataset-1.csv")
-
+endTime = time.time()
+print("Time taken to convert df to pandas to csv: ", endTime-startTime)
 
 

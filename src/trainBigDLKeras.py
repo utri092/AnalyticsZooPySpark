@@ -73,7 +73,7 @@ print("EndTime!\n", endTime)
 print("Time Taken: ", endTime - startTime)
 print("Trained")
 
-trainedNN.model.saveModel(modelPath="../resources/savedModel/bigdl/trainedNN.bigdl", weightPath="../resources/savedModel/bigdl/trainedNN.bin", over_write=True)
+trainedNN.model.saveModel(modelPath="../resources/savedModels/bigdl/trainedNN.bigdl", weightPath="../resources/savedModels/bigdl/trainedNN.bin", over_write=True)
 
 print("Saved!")
 

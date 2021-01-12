@@ -31,9 +31,9 @@ model = tf.keras.Model(inputs=parkingInput, outputs=lastLayer, name="functionalM
 
 model.compile(optimizer='adam', loss='mean_squared_error')
 
-inferenceWeights = model.get_weights()
+kerasModelEmptyWeights = model.get_weights()
 print("Model1 Weights before setting from Cluster! \n")
-print(inferenceWeights)
+print(kerasModelEmptyWeights)
 
 
 ############### STEP 2: Load Trained BigDL Model ###############
@@ -56,7 +56,7 @@ spark = SparkSession.builder \
 
 init_engine()
 
-bigDlModel = Model.loadModel(modelPath="../resources/savedModel/bigdl/trainedNN.bigdl", weightPath="../resources/savedModel/bigdl/trainedNN.bin")
+bigDlModel = Model.loadModel(modelPath="../resources/savedModels/bigdl/trainedNN.bigdl", weightPath="../resources/savedModels/bigdl/trainedNN.bin")
 
 print("Loaded BigDL Model !")
 
@@ -64,12 +64,13 @@ zooWeights = bigDlModel.get_weights()
 
 ############### STEP 3:  Reshape Weights & Bias Arrays of BigDL Model to Keras Model's Original Shape
 
+# Note:- If reshape errors occur. That means architecure(model.summary()) has not been replicated exactly
 for i in range(len(zooWeights)):
 
-    zooWeights[i] = zooWeights[i].reshape(inferenceWeights[i].shape)
+    zooWeights[i] = zooWeights[i].reshape(kerasModelEmptyWeights[i].shape)
 
 model.set_weights(zooWeights)
 
-model.save(filepath="../resources/savedModels/keras/inferenceModel.h5")
+model.save(filepath="../resources/savedModels/keras_1.2.2/convertedInferenceModel.h5")
 
 print("Saved Model!")

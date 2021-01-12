@@ -5,13 +5,10 @@ TfPark Sequential example
 import tensorflow as tf
 import pandas as pd
 from zoo.common.nncontext import *
-from zoo.pipeline.nnframes import NNModel
-from zoo.tfpark import TFDataset
 from pyspark.sql import SparkSession
 from zoo.tfpark import KerasModel, TFDataset
 from sklearn.model_selection import train_test_split
-from bigdl.nn.criterion import *
-from zoo.pipeline.nnframes import NNEstimator
+
 from bigdl.nn.layer import *
 
 conf = create_spark_conf() \
@@ -86,6 +83,6 @@ weights = keras_model.get_weights()
 
 kModel = Model()
 
-# keras_model.save_weights("../resources/savedModels/keras/weights/wt.h5")
+keras_model.save_weights("../resources/savedModels/keras/weights/wt.h5")
 
-# keras_model.save_model("../resources/savedModels/keras/model.h5")
+keras_model.save_model("../resources/savedModels/keras/model.h5")

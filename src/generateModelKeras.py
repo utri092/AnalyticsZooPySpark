@@ -3,38 +3,18 @@ Generates a simple nn model using keras 1.2.2 and stores it in a model - See 2 f
 
 """
 
-import pandas as pd
-from sklearn.model_selection import train_test_split
 import keras
-
-"""
-TODO: Deprecated: Will be refactored to read data when training a model
-# Read the dataset 1
-df = pd.read_csv("../resources/datasets/dataset-1-converted.csv")
-
-# Split into training and test data
-trainDf, testDf = train_test_split(df, test_size=0.2)
-print("Created Train and Test Df\n")
-
-predictionColumn = 'slotOccupancy'
-
-x = trainDf.drop(columns=[predictionColumn])
-inputs = len(x.columns)
-
-y = trainDf[[predictionColumn]]
-outputs = len(y.columns)
-
-
-"""
-
 
 
 inputs = 2
+hidden = 5
 outputs =1
 
 model = keras.models.Sequential()
 model.add(keras.layers.Dense(inputs, activation='relu', input_shape=(inputs,)))
-model.add(keras.layers.Dense(inputs, activation='relu'))
+model.add(keras.layers.Dense(hidden, activation='relu'))
+model.add(keras.layers.Dense(hidden, activation='relu'))
+model.add(keras.layers.Dense(hidden, activation='relu'))
 model.add(keras.layers.Dense(outputs))
 
 log_dir = "../resources/board/model_log"

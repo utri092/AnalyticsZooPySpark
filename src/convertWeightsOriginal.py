@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
+###################### STEP1: Create tf.Keras Model ######################
 
 df = pd.read_csv("../resources/datasets/dataset-1_converted.csv")
 
@@ -34,7 +35,7 @@ model = tf.keras.Model(inputs=parkingInput, outputs=lastLayer, name="functionalM
 
 model.compile(optimizer='adam', loss='mean_squared_error')
 
-# model.summary()
+model.summary()
 
 print(model.get_weights())
 weights = model.get_weights()
@@ -42,6 +43,9 @@ print("Model1 Weights\n")
 print(weights)
 
 model.save_weights("../resources/savedModels/keras/weights/wt.h5")
+
+
+###################### STEP2: Create Zoo Model of Same Archtitecture ######################
 
 from zoo.pipeline.api.keras.models import Model
 from zoo.pipeline.api.keras.layers import Input, Dense
@@ -70,24 +74,25 @@ denseLayer2 = Dense(output_dim=inputs, activation="relu")
 hidden2 = denseLayer2(parkingInput2)
 
 lastLayer2 = Dense(output_dim=outputs,activation="relu")(hidden2)
-model2 = Model(input=parkingInput2, output=lastLayer2, name="functionalModel2")
+zooModel = Model(input=parkingInput2, output=lastLayer2, name="functionalModel2")
 # model2 = Model(inputs=[parkingInput2], outputs=[lastLayer2])
 
 log_dir = "../resources/board/model_log"
 app_name = "zooKeras"
-model2.set_tensorboard(log_dir = log_dir, app_name=app_name)
+zooModel.set_tensorboard(log_dir = log_dir, app_name=app_name)
 
-model2.compile(optimizer='adam', loss='mean_squared_error')
+zooModel.compile(optimizer='adam', loss='mean_squared_error')
 
-model2.fit(x=x.to_numpy(), y=y.to_numpy(), nb_epoch=2, distributed=False)
-model2.summary()
+zooModel.fit(x=x.to_numpy(), y=y.to_numpy(), nb_epoch=2, distributed=False)
+zooModel.summary()
 
-weights2 = model2.get_weights()
+weights2 = zooModel.get_weights()
 
-layers = model2.layers
+layers = zooModel.layers
 
 layersList = []
 
+###################### Step 3: Reshape. Hard Coded in this example ######################
 for i, layer in enumerate(layers):
 
     try:
@@ -120,12 +125,9 @@ for i, layer in enumerate(layers):
     except Exception as e:
         print(e)
 
-        pass
-
-
-print("done")
-
 model.set_weights(layersList)
 
-model.save_weights(filepath="../resources/savedModels/lol.h5")
-model.save(filepath="../resources/savedModels/lol2.h5")
+model.save_weights(filepath="../resources/savedModels/keras_1.2.2/convertedWeights.h5")
+model.save(filepath="../resources/savedModels/keras_1.2.2/convertedModel.h5")
+
+print("done")
